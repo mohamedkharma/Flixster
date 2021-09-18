@@ -3,6 +3,7 @@ package com.example.flixster.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.flixster.R;
 import com.example.flixster.models.Movie;
 
@@ -77,28 +81,24 @@ public class MovieAdapter extends  RecyclerView.Adapter<MovieAdapter.ViewHolder>
             tvTitle.setText(movie.getTitle());
             tvOverview.setText(movie.getOverview());
             String imageUrl;
+            RequestBuilder<Drawable> image;
             // Set image based on orientation
             // if phone is in landscape
             if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 // imageUrl = back drop image
                 imageUrl = movie.getBackdropPath();
+                image = Glide.with(context).load(imageUrl)
+                        .placeholder(R.drawable.flicks_backdrop_placeholder)
+                        .error(R.drawable.flicks_backdrop_placeholder);
             } else {
                 // imageUrl = poster image
                 imageUrl = movie.getPosterPath();
+                image = Glide.with(context).load(imageUrl).placeholder(R.drawable.flicks_movie_placeholder)
+                        .error(R.drawable.flicks_movie_placeholder);
             }
 
             Glide.with(context).load(imageUrl).into(ivPoster);
 
-            // 1. Register click listener on the whole container
-            // 2. Navigate to a new detail view on tap
-//            container.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent i = new Intent(context, DetailActivity.class);
-//                    i.putExtra("movie", Parcels.wrap(movie));
-//                    context.startActivity(i);
-//                }
-//            });
         }
     }
 }
